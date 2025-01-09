@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Broadcast-4</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #334155;
+            background-color: #f8fafc;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+        }
+
+        .header-bg {
+            background: #ffffff;
+            position: relative;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .section-title {
+            position: relative;
+            padding-left: 1rem;
+            margin: 2rem 0 1rem;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #3b82f6;
+            border-radius: 2px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .team-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .profile-image-container {
+            width: 160px;
+            height: 160px;
+            margin-bottom: 1.5rem;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #e5e7eb;
+        }
+
+        .profile-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .team-card-content {
+            width: 100%;
+        }
+
+        .team-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+
+        .team-card .role {
+            font-size: 1rem;
+            color: #4b5563;
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+        }
+
+        .team-card .description {
+            font-size: 0.875rem;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .image-placeholder {
+            height: 25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .partner-logos {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            align-items: center;
+            margin: 2rem 0;
+        }
+
+        .logo-placeholder {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80px;
+        }
+
+        /* Improved Slideshow Styles */
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .slideshow {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slide {
+            flex: 0 0 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .slideshow-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: background-color 0.3s;
+            z-index: 10;
+        }
+
+        .nav-button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .nav-button.prev {
+            left: 20px;
+        }
+
+        .nav-button.next {
+            right: 20px;
+        }
+
+        .dots-container {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .dot.active {
+            background-color: white;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto my-8 rounded-xl shadow-lg overflow-hidden">
+        <header class="header-bg px-6 py-8">
+            <div class="flex items-center justify-between mb-4">
+                <img src="dcoe.jpg" alt="dcoe Logo" class="w-1/4">
+                <div>
+                    <h1 class="text-4xl font-bold text-gray-800">Introducing the D-CoE at IISc Bangalore</h1>
+                    <h5 class="text-2xl font-bold text-black-100">Transforming Design and Innovation in Karnataka</h5>
+                    <br>
+                    <p class="text-sm text-black-600 mt-2">Broadcast 1.4, Brought to you by the SA team IMPACTforImpact Lab.</p>
+                </div>
+            </div>
+        </header>   
+
+        <main class="p-8">
+            <div class="max-w-4xl mx-auto">
+                <!-- Introduction Section -->
+                <section class="mb-12">
+                    <h1 class="section-title text-2xl font-bold">Empowering Karnataka Through Design and Innovation</h1>
+                    <div class="mb-6">
+                        <p class="text-lg text-black-600 leading-relaxed">
+                            Every day, brilliant ideas in Karnataka fail to reach their full potential. Eight out of ten startups struggle to survive, and countless innovations never make it past the drawing board. The Design Centre of Excellence (D-CoE) at IISc Bangalore exists to transform Karnataka into India's design and innovation powerhouse.
+                        </p>
+                    </div>
+                    <div class="image-placeholder h-64 relative flex justify-center items-center bg-gray-100">
+                        <img src="20241024_115107448_iOS.jpg" alt="D-CoE Journey" class="w-full h-full object-cover">
+                    </div>
+                </section>
+
+                <!-- Previous Broadcasts Section -->
+                <section class="mb-12">
+                    <h2 class="section-title text-2xl font-bold">The Story of D-CoE: Summary of Previous Broadcasts</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100">
+                            <h3 class="font-semibold text-lg mb-3">
+                                <a href="Broadcast1.1.pdf" class="text-blue-600 hover:underline">The Dawn of Innovation</a>
+                            </h3>
+                            <p class="text-gray-600">We unveiled the D-CoE—a groundbreaking partnership that bridges the gap between academic excellence and industrial innovation.</p>
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100">
+                            <h3 class="font-semibold text-lg mb-3">
+                                <a href="Broadcast2.pdf" class="text-blue-600 hover:underline">Breaking the Innovation Barrier</a>
+                            </h3>
+                            <p class="text-gray-600">We revealed how our revolutionary blend of design thinking, prototyping, and digital transformation helps organizations thrive, not just survive.</p>
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100">
+                            <h3 class="font-semibold text-lg mb-3">
+                                <a href="Broadcast-3.html" class="text-blue-600 hover:underline">Standing on Giants' Shoulders</a>
+                            </h3>
+                            <p class="text-gray-600">We shared our roots in IISc's six-decade legacy of design excellence and our pioneering CPDM program.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Facilities Section -->
+                <section class="mb-12">
+                    <h2 class="section-title text-2xl font-bold">Spark Your Success: Our Innovation Engine</h2>
+                    <div class="slideshow-container">
+                        <div class="slideshow">
+                            <div class="slide">
+                                <img src="20241217_095640353_iOS.jpg" alt="Prototyping Labs" class="slideshow-image">
+                            </div>
+                            <div class="slide">
+                                <img src="20241015_061749264_iOS.jpg" alt="Industry 4.0 Hub" class="slideshow-image">
+                            </div>
+                            <div class="slide">
+                                <img src="20241217_100958576_iOS.jpg" alt="Design Spaces" class="slideshow-image">
+                            </div>
+                        </div>
+                        
+                        <button class="nav-button prev" onclick="prevSlide()">&#10094;</button>
+                        <button class="nav-button next" onclick="nextSlide()">&#10095;</button>
+                        
+                        <div class="dots-container">
+                            <div class="dot active" onclick="goToSlide(0)"></div>
+                            <div class="dot" onclick="goToSlide(1)"></div>
+                            <div class="dot" onclick="goToSlide(2)"></div>
+                        </div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3 class="font-semibold">Learning by Doing</h3>
+                            <p class="text-gray-600">Turn ideas into reality in our advanced mechanical and electronic prototyping labs that mirror industry standards.</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 class="font-semibold">Expert-Guided Growth</h3>
+                            <p class="text-gray-600">Learn from IISc faculty and industry leaders through real-world problem-solving approaches.</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 class="font-semibold">Flexible Learning Paths</h3>
+                            <p class="text-gray-600">Choose your journey with individual modules, PG certification, or workshops in person or online.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Who We Serve Section -->
+                <section class="mb-12">
+                    <h2 class="section-title text-2xl font-bold">Unlock Your Potential:D-CoE Programs That Power Growth</h2>
+                    <div class="image-placeholder h-64 relative flex justify-center items-center bg-gray-100 mb-6">
+                        <img src="Opportunitie.png" alt="Our Community" class="w-full h-full object-cover">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-6 bg-white border border-gray-200 rounded-lg">
+                            <h3 class="font-semibold mb-3">Future-Ready Students</h3>
+                            <p class="text-gray-600">Turn your education into real-world success with hands-on experience and industry-relevant skills that employers want.</p>
+                        </div>
+                        <div class="p-6 bg-white border border-gray-200 rounded-lg">
+                            <h3 class="font-semibold mb-3">SME Success Stories</h3>
+                            <p class="text-gray-600">Stay ahead in the digital age by integrating new technologies and boosting efficiency without breaking the bank.</p>
+                        </div>
+                        <div class="p-6 bg-white border border-gray-200 rounded-lg">
+                            <h3 class="font-semibold mb-3">Startup Launchpad</h3>
+                            <p class="text-gray-600">Beat the odds with expert guidance, from design thinking to business development, plus access to state-of-the-art facilities.</p>
+                        </div>
+                        <div class="p-6 bg-white border border-gray-200 rounded-lg">
+                            <h3 class="font-semibold mb-3">Professional Powerhouse</h3>
+                            <p class="text-gray-600">Keep your skills sharp and lead in your field with cutting-edge knowledge and practical expertise.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Vision 2029 Section -->
+                <section class="mb-12">
+                    <h2 class="section-title text-2xl font-bold">2029: A Blueprint for Excellence</h2>
+                    <div class="image-placeholder h-64 relative flex justify-center items-center bg-gray-100 mb-6">
+                        <img src="Vision-DCOE.png" alt="Future Vision" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-gray-600">
+                        We're building a future where 40,000 professionals lead with design thinking, more startups succeed and grow, and Karnataka becomes a model for design-driven innovation.
+                    </p>
+                </section>
+
+                <!-- Call to Action Section -->
+                <section class="mb-12">
+                    <h2 class="section-title text-2xl font-bold">Your Next Move: Join the D-CoE Innovation Revolution</h2>
+                    <div class="image-placeholder h-64 relative flex justify-center items-center bg-gray-100 mb-6">
+                        <img src="20241016_044713903_iOS.jpg" alt="Join Us" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-gray-600">
+                        Be part of Karnataka's design revolution. Whether you're a student with big dreams, a business owner looking to grow, or a professional seeking new skills, your journey to success starts here.
+                    </p>
+                    <p class="text-gray-600 mt-4">
+                        Visit our website or contact us to learn more about how you can be part of this transformative journey.
+                    </p>
+                </section>
+
+                <!-- Partners Section -->
+                <section class="mb-12">
+                    <h2 class="section-title text-2xl font-bold">Meet the D-CoE Partners</h2>
+                    <div class="partner-logos">
+                        <img src="karnataka.png" alt="dcoe partner1" class="w-1/2">
+                        <img src="ktech.png" alt="dcoe partner2" class="w-1/2">
+                        <img src="iisc.png" alt="dcoe partner3" class="w-1/2">
+                        <img src="fsid.png" alt="dcoe partner4" class="w-1/2">
+                        <img src="dm.png" alt="dcoe partner5" class="w-1/2">
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer class="bg-gray-50 border-t border-gray-200 py-8 px-6">
+            <div class="max-w-3xl mx-auto text-center">
+                <p class="text-gray-600">&copy; 2024 D-CoE at IISc. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        const totalSlides = document.querySelectorAll('.slide').length;
+
+        function updateSlidePosition() {
+            const slideshow = document.querySelector('.slideshow');
+            slideshow.style.transform = `translateX(-${currentIndex * 100}%)`;
+            
+            // Update dots
+            document.querySelectorAll('.dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % totalSlides;
+            updateSlidePosition();
+        }
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+            updateSlidePosition();
+        }
+
+        function goToSlide(index) {
+            currentIndex = index;
+            updateSlidePosition();
+        }
+
+        // Auto-advance slides every 5 seconds
+        setInterval(nextSlide, 7000);
+    </script>
+</body>
+</html>
