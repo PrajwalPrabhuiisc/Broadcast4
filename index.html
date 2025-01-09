@@ -358,12 +358,9 @@
                     <div class="image-placeholder h-64 relative flex justify-center items-center bg-gray-100 mb-6">
                         <img src="Vision-DCOE.png" alt="Future Vision" class="w-full h-full object-cover">
                     </div>
-                    <p class="text-gray-600">
-                        We're building a future where 40,000 professionals lead with design thinking, more startups succeed and grow, and Karnataka becomes a model for design-driven innovation.
-                    </p>
+
                 </section>
 
-                <!-- Call to Action Section -->
                 <section class="mb-12">
                     <h2 class="section-title text-2xl font-bold">Your Next Move: Join the D-CoE Innovation Revolution</h2>
                     <div class="image-placeholder h-64 relative flex justify-center items-center bg-gray-100 mb-6">
@@ -373,9 +370,17 @@
                         Be part of Karnataka's design revolution. Whether you're a student with big dreams, a business owner looking to grow, or a professional seeking new skills, your journey to success starts here.
                     </p>
                     <p class="text-gray-600 mt-4">
-                        Visit our website or contact us to learn more about how you can be part of this transformative journey.
+                        Visit our website or 
+                        <a 
+                            href="https://www.linkedin.com/company/centre-of-excellence-in-design/posts/?feedView=all" 
+                            class="text-black-600 font-bold hover:underline hover:text-blue-800 transition duration-200"
+                        >
+                            contact us
+                        </a> 
+                        to learn more about how you can be part of this transformative journey.
                     </p>
                 </section>
+                
 
                 <!-- Partners Section -->
                 <section class="mb-12">
@@ -397,8 +402,13 @@
             </div>
         </footer>
     </div>
-
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-956ZLSWPH4"></script>
     <script>
+         window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-956ZLSWPH4');
         let currentIndex = 0;
         const totalSlides = document.querySelectorAll('.slide').length;
 
@@ -429,6 +439,7 @@
 
         // Auto-advance slides every 5 seconds
         setInterval(nextSlide, 7000);
+        
     </script>
 </body>
 </html>
